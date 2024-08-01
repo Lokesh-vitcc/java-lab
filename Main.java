@@ -1,54 +1,25 @@
 import java.util.Scanner;
-
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
-
-        while (!exit) {
-            System.out.println("Calculator Menu:");
-            System.out.println("1. Addition");
-            System.out.println("2. Subtraction");
-            System.out.println("3. Multiplication");
-            System.out.println("4. Division");
-            System.out.println("5. Exit");
-            System.out.print("Choose an option (1-5): ");
-            int choice = scanner.nextInt();
-
-            if (choice == 5) {
-                exit = true;
-                System.out.println("Exiting calculator. Goodbye!");
-                break;
-            }
-
-            System.out.print("Enter the first number: ");
-            double num1 = scanner.nextDouble();
-            System.out.print("Enter the second number: ");
-            double num2 = scanner.nextDouble();
-            
-            switch (choice) {
-                case 1:
-                    System.out.println("Result: " + (num1 + num2));
-                    break;
-                case 2:
-                    System.out.println("Result: " + (num1 - num2));
-                    break;
-                case 3:
-                    System.out.println("Result: " + (num1 * num2));
-                    break;
-                case 4:
-                    if (num2 != 0) {
-                        System.out.println("Result: " + (num1 / num2));
-                    } else {
-                        System.out.println("Error: Division by zero is not allowed.");
-                    }
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please choose a valid option.");
-                    break;
-            }
-            System.out.println();
+class Main{
+    public static void main(String args[]){
+        // int arr[] = {1,2,3,4,5,6,7,8,9,0};
+        // Array arr = new Array();
+        Scanner sb = new Scanner(System.in);
+        System.err.println("Enter Numbers of array:");
+        for (;;){
+            System.out.println(">>>");
+            sb.nextLine()
         }
-        scanner.close();
+        int max[]= {0,0,0};
+        for (int i=0;i<arr.length;i++){
+            int val=arr[i];
+            for (int j=0; j<max.length;j++){
+                if (max[j] < val){
+                    int tmp = max[j];
+                    max[j]=val;
+                    val = tmp;
+                }
+            }
+        }
+        System.out.println("3rd largest number is:"+max[max.length-1]);
     }
 }
