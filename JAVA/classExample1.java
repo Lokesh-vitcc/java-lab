@@ -1,5 +1,5 @@
 // import java.util.*;
-public class Main{
+public class classExample1{
     public static void main(String[] arg){
         Student[] arr;
         arr = new Student[3];
