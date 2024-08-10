@@ -35,4 +35,4 @@ with repo.git.custom_environment(GIT_ASKPASS="echo", GIT_USERNAME=creds['usernam
     repo.index.commit(COMMIT_MESSAGE)
     repo.git.push(remote_url)# , 'HEAD:refs/heads/main', '--force')
 # Clean up (optional)
-del token
+del creds
