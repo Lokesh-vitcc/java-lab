@@ -13,6 +13,7 @@ def ParseArgs():
     # vincentHelper tool comming up XD
     parser = argparse.ArgumentParser(prog="remoteGit",description="This program helps students to update their repos\nfrom the comfort of lab computer safely!")
     parser.add_argument('cmd',nargs="?",help=" commands: push")
+    parser.add_argument('-f','--forcePush',action='store_true',help="push --force")
     parser.add_argument('-a','--pushAll',action='store_true',help="commit and push everything from the repo root")
     parser.add_argument('-r','--resetCreds',action='store_true',help=" create/reset credentials for git user and also this program\'s password")
     parser.add_argument('-v','--viewCreds',action='store_true',help="Show all encrypted configs (caution sensitive data will be printed out)")
@@ -87,7 +88,7 @@ elif (args.cmd=="push"):
         # commit changes and push
         # logs +=
         repo.index.commit(COMMIT_MESSAGE)
-        logs += repo.git.push()
+        logs += repo.git.push(force = args.forcePush)
     # Clean up
     del creds
     print(logs)
