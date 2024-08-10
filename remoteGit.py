@@ -9,13 +9,16 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 import argparse
 
-def getArgs():
-    parser = argparse.ArgumentParser(prog="vincentHelper",description="This program helps students to update their repos\nfrom the comfort of lab computer safely!")
-    parser.add_argument('-r','--resetCreds',action='store_true')
-    parser.add_argument('-v','--viewCreds',action='store_true')
-    parser.add_argument('-m','--commitMessage')
+def ParseArgs():
+    # vincentHelper tool comming up XD
+    parser = argparse.ArgumentParser(prog="remoteGit",description="This program helps students to update their repos\nfrom the comfort of lab computer safely!")
+    parser.add_argument('cmd',nargs="?",help=" commands: push")
+    parser.add_argument('-a','--pushAll',action='store_true',help="commit and push everything from the repo root")
+    parser.add_argument('-r','--resetCreds',action='store_true',help=" create/reset credentials for git user and also this program\'s password")
+    parser.add_argument('-v','--viewCreds',action='store_true',help="Show all encrypted configs (caution sensitive data will be printed out)")
+    parser.add_argument('-m','--commitMessage',help="adds your message along with default commit message")
 
-    return parser.parse_args()
+    return parser
 
 def keyGen(passwd):
     salt = b'\xc6\xd0B\xbc_\xcf\x14\xdc\xa4\xe0\x036\xd2\xcb\xa8)'
@@ -27,9 +30,6 @@ def keyGen(passwd):
     )
     return base64.urlsafe_b64encode(kdf.derive(passwd.encode()))
 
-args = getArgs()
-cred_file = ".creds"
-
 def decrypt():
     fernet = Fernet(keyGen(getpass(prompt="password (helper):")))
     with open(cred_file,'rb') as f:
@@ -37,8 +37,13 @@ def decrypt():
             creds = fernet.decrypt(f.read())
         except:
             print("Invalid password")
+            exit()
 
     return json.loads(creds.decode())
+
+parser = ParseArgs()
+args = parser.parse_args()
+cred_file = ".creds"
 
 if (args.resetCreds):
     creds={}
@@ -59,25 +64,34 @@ if (args.resetCreds):
 elif (args.viewCreds):
     creds = decrypt()
     print("\n".join("\t".join(x) for x in creds.items()))
-else:
-
+    exit()
+elif (args.cmd=="push"):
     creds = decrypt()
     repo = Repo()
-    remote_url = repo.remotes.origin.url
 
     now = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     COMMIT_MESSAGE=f"automated commit By script @ {now} from PC: {os.getlogin()}."
     if (msg:=args.commitMessage):
-        COMMIT_MESSAGE+=f" Additional message: {msg}"
+        COMMIT_MESSAGE+=f"\nAdditional message: {msg}"
     untracked_dirs=["JAVA","scripts"]
     with repo.git.custom_environment(GIT_ASKPASS="echo", GIT_USERNAME=creds['username'], GIT_PASSWORD=creds["token"]):
         # add untracked files of specific dirs to staging area
-        repo.git.add(*untracked_dirs,A=True)
+        logs=""
+        logs+=repo.git.add(*untracked_dirs,A=True)
         # and also add modifications on all tracked files to staging area
-        repo.git.add(update=True)
-
+        if args.pushAll:
+            logs +=repo.git.add(A=True)
+        else:
+            logs +=repo.git.add(update=True)
+        
         # commit changes and push
+        # logs +=
         repo.index.commit(COMMIT_MESSAGE)
-        repo.git.push()
+        logs += repo.git.push()
     # Clean up
     del creds
+    print(logs)
+    print("Pushed successfully")
+else:
+    print("Invalid syntax")
+    parser.print_help()
