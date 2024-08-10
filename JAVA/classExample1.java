@@ -10,7 +10,6 @@ public class classExample1{
             stu.display();
         }
     }
-    
 }
 class Student{
     public int rollNo;

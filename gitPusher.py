@@ -30,8 +30,13 @@ repo = Repo()
 remote_url = repo.remotes.origin.url
 # Temporarily set the remote URL using custom environment
 COMMIT_MESSAGE="Test message another time"
+untracked_dirs=["JAVA","scripts"]
+
 with repo.git.custom_environment(GIT_ASKPASS="echo", GIT_USERNAME=creds['username'], GIT_PASSWORD=creds["token"]):
-    repo.git.add(update=True)
+    # add untracked files of specific dirs to staging area
+    # and also add modifications on all tracked files to staging area
+    
+    repo.git.add("JAVA",".",A=True)
     repo.index.commit(COMMIT_MESSAGE)
     repo.git.push(remote_url)# , 'HEAD:refs/heads/main', '--force')
 # Clean up (optional)
