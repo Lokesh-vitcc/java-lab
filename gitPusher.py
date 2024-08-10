@@ -36,7 +36,8 @@ with repo.git.custom_environment(GIT_ASKPASS="echo", GIT_USERNAME=creds['usernam
     # add untracked files of specific dirs to staging area
     # and also add modifications on all tracked files to staging area
     
-    repo.git.add("JAVA",".",A=True)
+    repo.git.add(*untracked_dirs,A=True)
+    repo.git.add(update=True)
     repo.index.commit(COMMIT_MESSAGE)
     repo.git.push(remote_url)# , 'HEAD:refs/heads/main', '--force')
 # Clean up (optional)
