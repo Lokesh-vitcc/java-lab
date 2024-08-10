@@ -1,17 +1,26 @@
+import os
 from git import Repo
+from getpass import getpass
 
-# PATH_OF_GIT_REPO = r'path\to\your\project\folder\.git'  # make sure .git folder is properly configured
-COMMIT_MESSAGE = 'comment from python script'
 
-def git_push():
-    try:
-        repo = Repo()
-        repo.git.add(update=True)
-        repo.index.commit(COMMIT_MESSAGE)
-        origin = repo.remote(name='origin')
-        origin.push()
-    except Exception as e:
-        print(e)
-        print('Some error occured while pushing the code')    
+# Define your personal access token, username, and repository name
+token = getpass()
+username = "Lokesh-Spectre"
+repo_name = ""
 
-print(git_push())
+# Local repository path
+repo_dir = "/path/to/your/local/repo"
+
+# Initialize the repository object
+repo = Repo()
+
+# Define the remote URL with the token
+remote_url = "https://github.com/Lokesh-vitcc/java-lab.git"
+
+# Temporarily set the remote URL using custom environment
+with repo.git.custom_environment(GIT_ASKPASS="echo", GIT_USERNAME=username, GIT_PASSWORD=token):
+    # Perform the push using the temporary remote URL
+    repo.git.push(remote_url, 'HEAD:refs/heads/main', '--force')
+
+# Clean up (optional)
+del token
