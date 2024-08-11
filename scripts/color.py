@@ -3,7 +3,7 @@ from pygments import highlight
 from pygments.lexers import JavaLexer
 from pygments.formatters import TerminalFormatter
 from termcolor import cprint
-
+import docx
 def highlight_java_code(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -16,7 +16,9 @@ def highlight_java_code(file_path):
     lexer = JavaLexer()
     formatter = TerminalFormatter()
     highlighted_code = highlight(code, lexer, formatter)
-    
+    doc = docx.Document()
+    doc.add_paragraph(highlighted_code)
+    doc.save("test.docx")
     # Print the highlighted code to the terminal
     cprint(highlighted_code, 'white', 'on_black')
 
@@ -27,3 +29,5 @@ if __name__ == "__main__":
 
     java_file_path = sys.argv[1]
     highlight_java_code(java_file_path)
+
+# https://stackoverflow.com/questions/41979095/write-text-in-particular-font-color-in-ms-word-using-python-docx

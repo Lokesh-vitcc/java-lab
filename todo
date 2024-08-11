@@ -1,0 +1,7 @@
+* make the doc.py script to generate word document report
+* take care of inputs and code font size
+* take care of syntax highlights
+* then make a prompted script, to make report for specific day
+
+# resources:
+# https://stackoverflow.com/questions/41979095/write-text-in-particular-font-color-in-ms-word-using-python-docx
