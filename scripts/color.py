@@ -1,7 +1,7 @@
 import sys
 from pygments import highlight
 from pygments.lexers import JavaLexer
-from pygments.formatters import TerminalFormatter
+from pygments.formatters import HtmlFormatter
 from termcolor import cprint
 import docx
 def highlight_java_code(file_path):
@@ -14,13 +14,9 @@ def highlight_java_code(file_path):
 
     # Highlight the code using Pygments
     lexer = JavaLexer()
-    formatter = TerminalFormatter()
+    formatter = HtmlFormatter(style="colorful",noclasses=True)
     highlighted_code = highlight(code, lexer, formatter)
-    doc = docx.Document()
-    doc.add_paragraph(highlighted_code)
-    doc.save("test.docx")
-    # Print the highlighted code to the terminal
-    cprint(highlighted_code, 'white', 'on_black')
+    return highlighted_code
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
